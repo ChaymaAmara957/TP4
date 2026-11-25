@@ -1,17 +1,18 @@
-# TP4 : Docker et Docker Compose (application MERN)
+# TP4 : Docker w Docker Compose (application MERN)
 
-**Étudiant(e) :** <ton nom> · **Classe :** 3ᵉ LIG · **Enseignante :** Zaineb SAKHRAWI
+## 1. Clonit el repo
+Mel loul clonit el repo mta3 el projet w d5alt lel dossier :
 
-## Ce que j'ai fait
-
-### 1. Cloner le projet
-J'ai cloné le dépôt du TP, qui contient deux dossiers : `Client` (React avec Vite) et `Server` (API Express sur le port 9000).
 ```bash
 git clone https://github.com/wiem-kb/MyAppReact.git
 cd MyAppReact
 ```
 
-### 2. Dockerfile du serveur (`Server/Dockerfile`)
+Fih zouz dossiers : `Server` w `Client`.
+
+## 2. 3malt el Dockerfile mta3 el server
+Fil dossier `Server` 3malt fichier `Dockerfile` w 7attit fih el code hedha :
+
 ```dockerfile
 FROM node:lts-alpine
 WORKDIR /app
@@ -21,13 +22,16 @@ COPY . .
 EXPOSE 9000
 CMD ["npm", "start"]
 ```
-J'ai construit l'image avec :
+
+Ba3d buildit l'image mta3 el server b el commande hedhi :
+
 ```bash
 docker build -t mern-server ./Server
 ```
 
-### 3. Dockerfile du client (`Client/Dockerfile`)
-Le client est construit avec `npm run build`, qui génère le dossier `dist` (Vite). Ce dossier est ensuite servi avec `serve` sur le port 3000.
+## 3. 3malt el Dockerfile mta3 el client
+Fil dossier `Client` 3malt zeda `Dockerfile` w 7attit fih :
+
 ```dockerfile
 FROM node:lts-alpine
 WORKDIR /app
@@ -39,24 +43,39 @@ RUN npm install -g serve
 EXPOSE 3000
 CMD ["serve", "-s", "dist", "-l", "3000"]
 ```
-J'ai construit l'image avec :
+
+W buildit l'image mta3 el client :
+
 ```bash
 docker build -t mern-client ./Client
 ```
 
-### 4. Réseau et conteneurs lancés à la main
+## 4. 3malt el réseau
+3malt réseau bech les conteneurs ynajmou yahdrou m3a b3adhhom :
+
 ```bash
 docker network create mern-network
+```
+
+## 5. Lancit MongoDB
+Lancit conteneur MongoDB w rbattou bel réseau :
+
+```bash
 docker run -d --name mongodb --network mern-network mongo
+```
+
+## 6. Lancit el server w el client
+
+```bash
 docker run -d --name server --network mern-network -p 9000:9000 mern-server
 docker run -d --name client --network mern-network -p 3000:3000 mern-client
 ```
-L'application s'affiche sur http://localhost:3000 et l'API répond sur http://localhost:9000/api/health.
 
-### 5. Docker Compose (`docker-compose.yml`)
-J'ai défini 3 services : `mongodb`, `server` et `client`, sur le réseau `mern-network` (driver `bridge`).
-Le serveur dépend de `mongodb` et reçoit `MONGO_URI=mongodb://mongodb:27017/merndb`. Le nom du service `mongodb` sert de hostname.
-Le client dépend du serveur.
+Thabbatt b `docker ps` elli les 3 conteneurs ye5dmou, w 7allit `http://localhost:3000` fil navigateur : l9it fih « API is running ».
+
+## 7. 3malt el docker-compose
+Fil racine mta3 el projet 3malt fichier `docker-compose.yml` w 7attit fih kima yheb el énoncé :
+
 ```yaml
 services:
   mongodb:
@@ -91,47 +110,22 @@ networks:
   mern-network:
     driver: bridge
 ```
-Lancement :
+
+Lancit kol chay b docker compose :
+
 ```bash
 docker compose up --build
 ```
 
-### 6. Publication sur Docker Hub
+## 8. Pushit les images 3al Docker Hub
+
 ```bash
 docker login
-docker tag mern-server <user-dockerhub>/mern-server:latest
-docker tag mern-client <user-dockerhub>/mern-client:latest
-docker push <user-dockerhub>/mern-server:latest
-docker push <user-dockerhub>/mern-client:latest
+docker tag mern-server chaymaamara2005/mern-server:latest
+docker tag mern-client chaymaamara2005/mern-client:latest
+docker push chaymaamara2005/mern-server:latest
+docker push chaymaamara2005/mern-client:latest
 ```
 
-### 7. Pipeline Jenkins (`Jenkinsfile`)
-J'ai créé un job Pipeline (« Pipeline script from SCM ») relié à mon dépôt GitHub. Le pipeline a 4 étapes :
-1. **Checkout** : récupère le code depuis GitHub.
-2. **Build images** : construit `mern-server` et `mern-client`.
-3. **Push Docker Hub** : se connecte avec l'identifiant Jenkins `dockerhub` et pousse les deux images.
-4. **Deploy (compose)** : relance l'application avec `docker compose up -d --build`.
-
-## Les livrables
-- `Server/Dockerfile` et `Client/Dockerfile`
-- `docker-compose.yml`
-- `Jenkinsfile`
-- Ce README
-
-### Captures
-**Pipeline Jenkins**
-
-![Pipeline Jenkins](captures/pipeline-jenkins.png)
-
-**Images Docker**
-
-![Images](captures/images.png)
-
-**Conteneurs**
-
-![Conteneurs](captures/conteneurs.png)
-
-### Liens
-- GitHub : https://github.com/<user-github>/TP4
-- Docker Hub (serveur) : https://hub.docker.com/r/<user-dockerhub>/mern-server
-- Docker Hub (client) : https://hub.docker.com/r/<user-dockerhub>/mern-client
+## 9. 3malt el pipeline Jenkins
+Pushit el projet 3al GitHub, w 3malt fichier `Jenkinsfile` fih 4 étapes : **Checkout** (yjib el code mel GitHub), **Build images**, **Push Docker Hub** w **Deploy** (docker compose). Ba3d fi Jenkins 3malt job Pipeline `TP4_MERN_Pipeline`, rbattou bel repo mta3 GitHub w lancit el build : les étapes lkol 5edmou b le vert.
