@@ -51,14 +51,14 @@ docker build -t mern-client ./Client
 ```
 
 ## 4. 3malt el réseau
-3malt réseau bech les conteneurs ynajmou yahdrou m3a b3adhhom :
+3malt réseau pour les conteneurs:
 
 ```bash
 docker network create mern-network
 ```
 
 ## 5. Lancit MongoDB
-Lancit conteneur MongoDB w rbattou bel réseau :
+Lancit conteneur MongoDB m3a il  réseau :
 
 ```bash
 docker run -d --name mongodb --network mern-network mongo
@@ -71,10 +71,10 @@ docker run -d --name server --network mern-network -p 9000:9000 mern-server
 docker run -d --name client --network mern-network -p 3000:3000 mern-client
 ```
 
-Thabbatt b `docker ps` elli les 3 conteneurs ye5dmou, w 7allit `http://localhost:3000` fil navigateur : l9it fih « API is running ».
+7allit `http://localhost:3000` w bil port 9000 zeda fil navigateur : l9it fihom zouz li « API is running ».
 
 ## 7. 3malt el docker-compose
-Fil racine mta3 el projet 3malt fichier `docker-compose.yml` w 7attit fih kima yheb el énoncé :
+Fil racine mta3 el projet 3malt fichier `docker-compose.yml` w 7attit :
 
 ```yaml
 services:
@@ -111,7 +111,7 @@ networks:
     driver: bridge
 ```
 
-Lancit kol chay b docker compose :
+j ai lancé tous ce la b docker compose :
 
 ```bash
 docker compose up --build
@@ -119,8 +119,7 @@ docker compose up --build
 
 ## 8. Pushit les images 3al Docker Hub
 
-```bash
-docker login
+```
 docker tag mern-server chaymaamara2005/mern-server:latest
 docker tag mern-client chaymaamara2005/mern-client:latest
 docker push chaymaamara2005/mern-server:latest
@@ -128,4 +127,4 @@ docker push chaymaamara2005/mern-client:latest
 ```
 
 ## 9. 3malt el pipeline Jenkins
-Pushit el projet 3al GitHub, w 3malt fichier `Jenkinsfile` fih 4 étapes : **Checkout** (yjib el code mel GitHub), **Build images**, **Push Docker Hub** w **Deploy** (docker compose). Ba3d fi Jenkins 3malt job Pipeline `TP4_MERN_Pipeline`, rbattou bel repo mta3 GitHub w lancit el build : les étapes lkol 5edmou b le vert.
+Pushit el projet 3al GitHub, w 3malt fichier `Jenkinsfile` Ba3d fi Jenkins 3malt job Pipeline `TP4_MERN_Pipeline`, rbattou bel repo mta3 GitHub w lancit el build : les étapes lkol 5edmo.
