@@ -37,6 +37,7 @@ pipeline {
         stage('Deploy (compose)') {
             steps {
                 bat '''
+                    docker rm -f mongodb server client 2>nul
                     docker compose version >nul 2>&1
                     if %errorlevel%==0 (
                         docker compose down
